@@ -1,0 +1,44 @@
+_min_copier_version: 9.0.0
+_subdirectory: template
+
+role_name:
+  type: str
+  help: What is your role name?
+  validator: >-
+    {% if not role_name %}
+    role_name cannot be empty.
+    {% endif %}
+
+role_namespace:
+  type: str
+  help: "What is your role namespace? (Ex: your GitHub username or organization)"
+  validator: >-
+    {% if not role_namespace %}
+    role_namespace cannot be empty.
+    {% endif %}
+
+role_description:
+  type: str
+  help: A short description of your role.
+
+repo_slug:
+  type: str
+  help: GitHub repository identifier (username/repo-name).
+  validator: >-
+    {% if not (repo_slug | regex_search('^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$')) %}
+    repo_slug must be in the format 'username/repo-name'.
+    {% endif %}
+
+repo_url:
+  type: str
+  help: The URL of your repository.
+  default: "https://github.com/{{ repo_slug }}"
+
+support_contact:
+  type: str
+  help: "Support contact email address."
+  default: "oss@brunopaz.dev"
+
+# Global tasks
+_tasks:
+  - "git init"

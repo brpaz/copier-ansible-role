@@ -1,0 +1,87 @@
+
+# {{ role_name }}
+
+<p align="center">
+
+![Ansible Role](https://img.shields.io/ansible/role/d/{{role_namespace}}/{{role_name}})](https://galaxy.ansible.com/ui/standalone/roles/{{role_namespace}}/{{role_name}}/)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/{{github_repository}}/ci.yml?branch=main&style=for-the-badge)](https://github.com/{{github_repository}}/actions)
+
+</p>
+
+> {{ role_description }}
+
+## 🚀Getting Started
+
+## Pre-Requisites
+
+
+## Installation
+
+### Using Ansible Galaxy
+
+You can install this role directly from Ansible Galaxy:
+
+```bash
+ansible-galaxy install {{ role_namespace }}.{{ role_name }}
+```
+
+### Using requirements.yml
+
+For version-controlled, repeatable role installations, add to your `requirements.yml`:
+
+```yaml
+---
+roles:
+  - name: {{role_namespace}}.{{ role_name }}
+    version: v1.0.0  # Specify the version you want
+
+collections:
+  - name: community.docker
+```
+
+Then install with:
+
+```bash
+ansible-galaxy install -r requirements.yml
+```
+
+### Manual Installation
+
+Alternatively, you can clone the repository directly:
+
+```bash
+# Create a roles directory if it doesn't exist
+mkdir -p ~/.ansible/roles
+# Clone the repository
+git clone {{repo_url }}.git ~/.ansible/roles/{{role_namespace}}.{{role_name}}
+```
+
+## Role Variables
+
+This role includes the following variables for configuration:
+
+## Role Dependencies
+
+- [community.docker](https://docs.ansible.com/ansible/latest/collections/community/docker/index.html) collection
+
+## Contribute
+
+All contributions are welcome. Please check [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
+
+## 🫶 Support
+
+If you find this project helpful and would like to support its development, there are a few ways you can contribute:
+
+[![Sponsor me on GitHub](https://img.shields.io/badge/Sponsor-%E2%9D%A4-%23db61a2.svg?&logo=github&logoColor=red&&style=for-the-badge&labelColor=white)](https://github.com/sponsors/brpaz)
+
+<a href="https://www.buymeacoffee.com/Z1Bu6asGV" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
+## License
+
+This project is MIT Licensed [LICENSE](LICENSE)
+
+## 📩 Contact
+
+✉️ **Email** - [{{support_email}}](mailto:{{support_email}})
+
+🖇️ **Source code**: [{{repo_url}}]({{repo_url}})

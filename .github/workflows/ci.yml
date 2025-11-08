@@ -1,0 +1,85 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+  release:
+    types: [published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.13"
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install copier
+        run: uv tool install copier
+
+      - name: Run generator
+        id: generator
+        run: |
+          tmpdir=$(mktemp -d)
+          # Define template inputs based on copier.yml variables
+          ROLE_NAME="curl"
+          ROLE_NAMESPACE="ciuser"
+          ROLE_DESCRIPTION="CI generated role for tests"
+          REPO_SLUG="${ROLE_NAMESPACE}/ansible-role-${ROLE_NAME}"
+          PROJECT_SLUG="ansible-role-${ROLE_NAME}"
+          SUPPORT_EMAIL="oss@example.com"
+
+          copier copy -r HEAD --force --trust --skip-tasks \
+            -d role_name="$ROLE_NAME" \
+            -d role_namespace="$ROLE_NAMESPACE" \
+            -d role_description="$ROLE_DESCRIPTION" \
+            -d repo_slug="$REPO_SLUG" \
+            -d repo_url="https://github.com/$REPO_SLUG" \
+            -d support_contact="$SUPPORT_EMAIL" \
+            . "$tmpdir"
+
+          echo "output_dir=$tmpdir/$PROJECT_SLUG" >> $GITHUB_OUTPUT
+
+      - name: Check generated files
+        run: |
+          OUTPUT_DIR="${{ steps.generator.outputs.output_dir }}"
+          echo "Checking essential files in: $OUTPUT_DIR"
+
+          REQUIRED_FILES=(
+            "README.md"
+            "LICENSE"
+            "requirements.txt"
+            "molecule/default/molecule.yml"
+            "tasks/main.yml"
+            "meta/main.yml"
+            "defaults/main.yml"
+          )
+
+          MISSING=()
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$OUTPUT_DIR/$file" ]; then
+              MISSING+=("$file")
+            fi
+          done
+
+          if [ ${#MISSING[@]} -eq 0 ]; then
+            echo "✅ All essential files are present!"
+          else
+            echo "❌ Missing files:"
+            printf '  - %s\n' "${MISSING[@]}"
+            exit 1
+          fi
