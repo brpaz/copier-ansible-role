@@ -52,7 +52,7 @@ jobs:
             -d support_contact="$SUPPORT_EMAIL" \
             . "$tmpdir"
 
-          echo "output_dir=$tmpdir/$PROJECT_SLUG" >> $GITHUB_OUTPUT
+          echo "output_dir=$tmpdir" >> $GITHUB_OUTPUT
 
       - name: Check generated files
         run: |
